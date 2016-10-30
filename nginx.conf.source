@@ -1,0 +1,17 @@
+http {
+	{% for server in servers %}
+	upstream s{% server[2] %} {
+		server 127.0.0.1:{% server[2] %};
+	}
+
+	server {
+		listen {% server[1] %};
+
+		location / {
+			proxy_pass http://s{% server[2] %};
+			auth_basic "{% server[0] %}";
+			auth_basic_user_file /password;
+		}
+	}
+	{% endfor %}
+}
