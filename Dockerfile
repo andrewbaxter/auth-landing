@@ -1,5 +1,8 @@
-FROM nginx:1
-ADD build.sh
+FROM nginx:1-alpine
+ADD build.sh .
+ENV PASSWORD SERVERS
 RUN sh build.sh
-ADD run.py
+ADD index.html.source .
+ADD nginx.conf.source .
+ADD run.py .
 CMD python run.py

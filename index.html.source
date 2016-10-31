@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<title>{% title %}</title>
+		<title>{{ server[0] }}</title>
 		<meta name="viewport" content="width=device-width">
 		<style>
 * { font-size: 1.05em; }
@@ -12,22 +12,24 @@ input[type=submit]:hover { background: #FFD044; }
 		</style>
 		<script>
 function password_submit() {
-	var dest = 
-		document.location.protocol + '//' + 
-		':' + document.getElementById('password').value + '@' +
-		document.location.hostname + document.location.pathname;
+	document.cookie = 'AUTH_COOKIE=' +
+		document.getElementById('password').value +
+		'; path=/; secure';
+	var dest = 'https://' +
+		document.location.host +
+		document.location.hash.slice(1);
 	window.location.href = dest;
 	return false;
 }
 		</script>
 	</head>
 	<body style="background: #101F2C;">
-	
+
 	<div style="display: inline-block; border-radius: 10px; border-style: solid; border-width: 5px; border-color: #204764; background: #9C4B2B; left: 50%; position: absolute; top: 50%; transform: translate(-50%, -50%);">
 		<form onsubmit="return password_submit();">
-			<input type="password" placeholder="Password" id="password" style="display: block; border-radius: 5px; background: white; margin: 5px; box-shadow: none; border: 0; width: 20em;">
+			<input type="password" placeholder="Password" id="password" autofocus style="display: block; border-radius: 5px; background: white; margin: 5px; box-shadow: none; border: 0; width: 20em;">
 			<input type="submit" value="Login" style="display: block; float: right; margin: 0 5px 5px 5px; border-radius: 5px; border: 0; box-shadow: none;">
-			<div style="display: inline-block; margin: 5px; vertical-align: center;">{% title %}</div>
+			<div style="display: inline-block; margin: 5px; vertical-align: center;">{{ server[0] }}</div>
 		</form>
 	</div>
 

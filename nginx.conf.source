@@ -1,17 +1,34 @@
+user nginx;
+worker_processes 1;
+daemon off;
+error_log stderr;
+events {
+    worker_connections 1024;
+}
 http {
+	access_log /dev/stdout combined;
+	include /etc/nginx/mime.types;
+	root /usr/share/nginx/html;
+
 	{% for server in servers %}
-	upstream s{% server[2] %} {
-		server 127.0.0.1:{% server[2] %};
+	upstream s{{ server[1] }} {
+		server 127.0.0.1:{{ server[2] }};
 	}
-
 	server {
-		listen {% server[1] %};
-
+		listen {{ server[1] }};
+		ssl on;
+        ssl_certificate /etc/ssl/cert.pem;
+        ssl_certificate_key /etc/ssl/key.pem;
 		location / {
-			proxy_pass http://s{% server[2] %};
-			auth_basic "{% server[0] %}";
-			auth_basic_user_file /password;
+			if ($http_cookie !~ "AUTH_COOKIE={{ password }}") {
+				rewrite ^(.*)$ /index_s{{ server[1] }}.html#$1 redirect;
+				expires -1;
+			}
+			proxy_pass http://s{{ server[1] }};
+		}
+		location = /index_s{{ server[1] }}.html {
 		}
 	}
 	{% endfor %}
 }
+
