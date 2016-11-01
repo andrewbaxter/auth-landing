@@ -13,6 +13,6 @@ openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -node
 ```
 3. Run
 ```
-docker run -e PASSWORD=password -e SERVERS='[["server1", 8081, 9165]]' -p 8081:8081 -v `pwd`/ssl:/etc/ssl:ro andrewbaxter/basic-auth-landing
+docker run -e PASSWORD=password -e SERVERS='[["server1", 8081, "localhost:9165"]]' -p 8081:8081 -v `pwd`/ssl:/etc/ssl:ro andrewbaxter/basic-auth-landing
 ```
-replacing `PASSWORD`, and `SERVERS`.  `SERVERS` is a json-encoded array of 3-tuple arrays of the service name, the exposed port, and the internal port.  Each exposed port must also be added with `-p`.
+replacing `PASSWORD`, and `SERVERS`.  `SERVERS` is a json-encoded array of 3-tuple arrays of the service name, the exposed port, and the internal address.  Each exposed port must also be added with `-p`.
