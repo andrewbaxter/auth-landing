@@ -20,7 +20,7 @@ http {
         ssl_certificate /etc/ssl/cert.pem;
         ssl_certificate_key /etc/ssl/key.pem;
 		location / {
-			if ($http_cookie !~ "AUTH_COOKIE={{ password }}") {
+			if ($cookie_AUTH_COOKIE != "{{ password | quote }}") {
 				rewrite ^(.*)$ /index_s{{ server[1] }}.html#$1 redirect;
 				expires -1;
 			}

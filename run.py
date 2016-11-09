@@ -1,9 +1,13 @@
 import json
 import os
+import re
 
 from jinja2 import Environment as je, FileSystemLoader as jfs
 
 je = je(loader=jfs('.'))
+je.filters['quote'] = (
+    lambda x: re.sub('["\\\\]', lambda m: '\\{}'.format(m.group(0)), x)
+)
 servers = json.loads(os.environ['SERVERS'])
 
 
